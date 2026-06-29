@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioinfoHub — 生物信息学工具发现平台</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #1a365d;
+    --color-primary-light: #2c5282;
+    --color-bg: #faf9f6;
+    --color-surface: #ffffff;
+    --color-border: #e8e4df;
+    --color-text: #2c2c2c;
+    --color-text-secondary: #6b6b6b;
+    --color-text-tertiary: #9a9a9a;
+    --color-accent: #b8860b;
+    --color-success: #2d6a4f;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    font-size: 15px;
+    color: var(--color-text);
+    background: var(--color-bg);
+    line-height: 1.6;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Noto Serif SC', 'STSong', 'SimSun', serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--color-primary);
+    margin-right: 48px;
+    cursor: pointer;
+  }
+
+  .nav { display: flex; gap: 4px; }
+  .nav-item {
+    display: inline-flex;
+    align-items: center;
+    height: 54px;
+    padding: 0 20px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .nav-item.active {
+    font-weight: 600;
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+    background: rgba(26,54,93,0.04);
+  }
+  .nav-item:hover { color: var(--color-primary-light); }
+
+  /* Content */
+  .content { max-width: 1240px; margin: 0 auto; padding: 28px 32px; }
+
+  .page-title {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--color-primary);
+    margin-bottom: 20px;
+  }
+
+  /* Controls */
+  .controls { margin-bottom: 16px; }
+  .search-input {
+    width: 100%;
+    max-width: 400px;
+    height: 36px;
+    padding: 0 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: inherit;
+    background: var(--color-surface);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-input:focus { border-color: var(--color-primary-light); }
+
+  .filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .filter-tag {
+    display: inline-flex;
+    align-items: center;
+    height: 30px;
+    padding: 0 10px;
+    font-size: 13px;
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .filter-tag:hover { border-color: var(--color-primary-light); color: var(--color-primary); }
+  .filter-tag.selected { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+
+  .sort-group {
+    display: flex;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .sort-btn {
+    height: 30px;
+    padding: 0 14px;
+    font-size: 13px;
+    font-family: inherit;
+    border: none;
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    border-right: 1px solid var(--color-border);
+  }
+  .sort-btn:last-child { border-right: none; }
+  .sort-btn:hover { background: #f5f3f0; }
+  .sort-btn.active { background: var(--color-primary); color: #fff; font-weight: 600; }
+
+  /* Tool List */
+  .tool-list { margin-top: 16px; }
+
+  .tool-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid transparent;
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  }
+  .tool-card:hover {
+    border-left-color: var(--color-primary);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+
+  .tool-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 6px;
+  }
+
+  .tool-name {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--color-primary);
+  }
+
+  .tool-stars {
+    color: var(--color-text-secondary);
+    font-size: 13px;
+    white-space: nowrap;
+    margin-left: 12px;
+  }
+  .tool-stars svg { fill: var(--color-accent); margin-right: 4px; vertical-align: -1px; }
+
+  .tool-desc {
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+
+  .tool-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    height: 24px;
+    padding: 0 8px;
+    font-size: 12px;
+    border-radius: 3px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    color: var(--color-text-secondary);
+  }
+  .badge.lang { border-color: #dce4ec; background: #edf2f7; color: var(--color-primary); }
+  .badge.cat  { color: var(--color-text-secondary); }
+
+  .tool-updated {
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    margin-left: 4px;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+    color: var(--color-text-secondary);
+    font-size: 13px;
+  }
+  .stats-bar strong { color: var(--color-primary); }
+
+  /* Footer note */
+  .footer-note {
+    margin-top: 40px;
+    padding: 16px 0;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-tertiary);
+    font-size: 12px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">BioinfoHub</div>
+  <div class="nav">
+    <span class="nav-item active">工具列表</span>
+    <span class="nav-item">趋势面板</span>
+    <span class="nav-item">工具对比</span>
+  </div>
+</div>
+
+<div class="content">
+  <div class="page-title">生物信息工具</div>
+
+  <div class="stats-bar">
+    <span>共 <strong id="total">8</strong> 个工具</span>
+    <span>★ 总计 <strong>168,629</strong></span>
+  </div>
+
+  <div class="controls">
+    <input class="search-input" type="text" placeholder="搜索工具名称或描述..." oninput="filterTools()" id="search">
+
+    <div class="filter-row">
+      <span class="filter-tag" data-cat="all" onclick="toggleCat(this)" id="cat-all">全部</span>
+      <span class="filter-tag" data-cat="ngs" onclick="toggleCat(this)">NGS/高通量测序</span>
+      <span class="filter-tag" data-cat="transcriptomics" onclick="toggleCat(this)">转录组学</span>
+      <span class="filter-tag" data-cat="proteomics" onclick="toggleCat(this)">蛋白质组学</span>
+      <span class="filter-tag" data-cat="systems-bio" onclick="toggleCat(this)">系统生物学</span>
+      <span class="filter-tag" data-cat="drug-discovery" onclick="toggleCat(this)">药物发现</span>
+
+      <span style="margin-left: 12px;"></span>
+      <div class="sort-group">
+        <button class="sort-btn active" data-sort="stars" onclick="sortTools(this)">最热</button>
+        <button class="sort-btn" data-sort="updated" onclick="sortTools(this)">最近更新</button>
+        <button class="sort-btn" data-sort="created" onclick="sortTools(this)">最新入库</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool-list" id="tool-list"></div>
+
+  <div class="footer-note">
+    BioinfoHub Demo · 测试数据仅供展示 · 数据来源: GitHub / bio.tools
+  </div>
+</div>
+
+<script>
+// ── Sample data ──────────────────────────────────────────────
+const tools = [
+  {
+    name: "Biopython",
+    slug: "biopython-biopython",
+    description: "Python tools for biological computation — sequence analysis, file parsing, BLAST, KEGG, and more.",
+    github_stars: 5093,
+    github_language: "Python",
+    github_license: "BSD",
+    github_updated_at: "2026-06-28",
+    categories: ["ngs", "proteomics"],
+    created_at: "2026-06-10"
+  },
+  {
+    name: "scientific-agent-skills",
+    slug: "k-dense-ai-scientific-agent-skills",
+    description: "Turn any AI agent into an AI Scientist. 140+ ready-to-use skills plus 100+ scientific databases covering biology, chemistry, medicine, and drug discovery.",
+    github_stars: 29575,
+    github_language: "Python",
+    github_license: "MIT",
+    github_updated_at: "2026-06-29",
+    categories: ["ngs", "proteomics", "drug-discovery"],
+    created_at: "2025-10-19"
+  },
+  {
+    name: "bwa",
+    slug: "lh3-bwa",
+    description: "Burrows-Wheeler Aligner — mapping DNA sequences against a large reference genome, essential for NGS variant calling pipelines.",
+    github_stars: 1753,
+    github_language: "C",
+    github_license: "GPL-3.0",
+    github_updated_at: "2026-05-12",
+    categories: ["ngs"],
+    created_at: "2026-03-01"
+  },
+  {
+    name: "AlphaFold3",
+    slug: "google-deepmind-alphafold3",
+    description: "Predicts the 3D structure and interactions of all biological molecules — proteins, DNA, RNA, and small molecules — with atomic accuracy.",
+    github_stars: 82341,
+    github_language: "Python",
+    github_license: "Apache-2.0",
+    github_updated_at: "2026-06-27",
+    categories: ["proteomics", "drug-discovery"],
+    created_at: "2024-11-01"
+  },
+  {
+    name: "Scanpy",
+    slug: "scverse-scanpy",
+    description: "Single-cell gene expression data analysis toolkit, widely used for scRNA-seq preprocessing, visualization, clustering, and trajectory inference.",
+    github_stars: 2104,
+    github_language: "Python",
+    github_license: "BSD",
+    github_updated_at: "2026-06-20",
+    categories: ["transcriptomics"],
+    created_at: "2026-01-15"
+  },
+  {
+    name: "CellChat",
+    slug: "jinworks-cellchat",
+    description: "Inference and analysis of cell-cell communication networks from single-cell transcriptomics data using ligand-receptor interactions.",
+    github_stars: 482,
+    github_language: "R",
+    github_license: "GPL-3.0",
+    github_updated_at: "2026-04-08",
+    categories: ["transcriptomics", "systems-bio"],
+    created_at: "2026-02-20"
+  },
+  {
+    name: "PyMOL",
+    slug: "schrodinger-pymol",
+    description: "Molecular visualization system producing high-quality 3D images of small molecules, biological macromolecules, and trajectories.",
+    github_stars: 1384,
+    github_language: "Python",
+    github_license: "BSD",
+    github_updated_at: "2026-06-15",
+    categories: ["proteomics"],
+    created_at: "2025-09-10"
+  },
+  {
+    name: "DESeq2",
+    slug: "thelovelab-deseq2",
+    description: "Differential gene expression analysis based on the negative binomial distribution, standard tool for RNA-seq count data analysis.",
+    github_stars: 45897,
+    github_language: "R",
+    github_license: "GPL-3.0",
+    github_updated_at: "2026-05-30",
+    categories: ["transcriptomics", "systems-bio"],
+    created_at: "2025-11-20"
+  }
+];
+
+const categoryNames = {
+  "ngs": "NGS/高通量测序",
+  "transcriptomics": "转录组学",
+  "proteomics": "蛋白质组学",
+  "systems-bio": "系统生物学",
+  "drug-discovery": "药物发现"
+};
+
+let currentSort = "stars";
+let selectedCat = "all";
+
+// ── Render ──────────────────────────────────────────────────
+function renderTools(filtered) {
+  const list = document.getElementById("tool-list");
+  document.getElementById("total").textContent = filtered.length;
+
+  list.innerHTML = filtered.map(t => {
+    const desc = t.description || "暂无描述";
+    const shortDesc = desc.length > 120 ? desc.slice(0, 120) + "…" : desc;
+    const updated = t.github_updated_at
+      ? new Date(t.github_updated_at).toLocaleDateString("zh-CN")
+      : null;
+    const catBadges = (t.categories || []).map(c =>
+      `<span class="badge cat">${categoryNames[c] || c}</span>`
+    ).join("");
+
+    return `
+      <div class="tool-card" onclick="alert('工具: ${t.name}\\nStars: ${t.github_stars.toLocaleString()}\\n语言: ${t.github_language || "—"}\\n协议: ${t.github_license || "—"}')">
+        <div class="tool-card-header">
+          <span class="tool-name">${t.name}</span>
+          <span class="tool-stars">
+            <svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            ${t.github_stars.toLocaleString()}
+          </span>
+        </div>
+        <div class="tool-desc">${shortDesc}</div>
+        <div class="tool-meta">
+          ${t.github_language ? `<span class="badge lang">${t.github_language}</span>` : ""}
+          ${t.github_license ? `<span class="badge">${t.github_license}</span>` : ""}
+          ${catBadges}
+          ${updated ? `<span class="tool-updated">&#128339; ${updated}</span>` : ""}
+        </div>
+      </div>`;
+  }).join("");
+}
+
+// ── Filter & Sort ──────────────────────────────────────────
+function getFiltered() {
+  let result = [...tools];
+
+  // search
+  const q = document.getElementById("search").value.toLowerCase();
+  if (q) {
+    result = result.filter(t =>
+      t.name.toLowerCase().includes(q) ||
+      (t.description || "").toLowerCase().includes(q)
+    );
+  }
+
+  // category
+  if (selectedCat !== "all") {
+    result = result.filter(t => (t.categories || []).includes(selectedCat));
+  }
+
+  // sort
+  if (currentSort === "stars") {
+    result.sort((a, b) => b.github_stars - a.github_stars);
+  } else if (currentSort === "updated") {
+    result.sort((a, b) => (b.github_updated_at || "").localeCompare(a.github_updated_at || ""));
+  } else {
+    result.sort((a, b) => (b.created_at || "").localeCompare(a.created_at || ""));
+  }
+
+  return result;
+}
+
+function filterTools() {
+  renderTools(getFiltered());
+}
+
+function toggleCat(el) {
+  document.querySelectorAll(".filter-tag[data-cat]").forEach(t => t.classList.remove("selected"));
+  el.classList.add("selected");
+  selectedCat = el.dataset.cat;
+  filterTools();
+}
+
+function sortTools(el) {
+  document.querySelectorAll(".sort-btn").forEach(b => b.classList.remove("active"));
+  el.classList.add("active");
+  currentSort = el.dataset.sort;
+  filterTools();
+}
+
+// ── Init ────────────────────────────────────────────────────
+document.getElementById("cat-all").classList.add("selected");
+renderTools(getFiltered());
+</script>
+</body>
+</html>
