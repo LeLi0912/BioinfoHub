@@ -57,9 +57,11 @@ cd frontend && npx vite --host 127.0.0.1
 
 ## 数据库
 
-- 数据库名: `bioinfohub` (utf8mb4)
-- 用户: `bioadmin` / `bioadmin123`
-- MySQL 通过 systemd 自启 (`sudo service mysql start` 手动启动)
+MySQL 8.0 (utf8mb4)，通过环境变量配置连接信息：
+
+- `DB_HOST` / `DB_PORT` — 数据库地址和端口
+- `DB_USER` / `DB_PASSWORD` — 认证凭据
+- `DB_NAME` — 数据库名
 
 ### 运行迁移
 ```bash

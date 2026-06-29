@@ -1,7 +1,5 @@
 # mysql启动
   #sudo service mysql start
-  # 数据库名: bioinfohub (utf8mb4)
-  # 用户: bioadmin / bioadmin123
 
 # 后端启动
  cd /mnt/c/Users/13637/Desktop/project/claudecode/bioinfoGet/backend && PYTHONPATH=. /mnt/c/Users/13637/Desktop/project/claudecode/bioinfoGet/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload

@@ -9,9 +9,9 @@ class Settings:
     # Database
     DB_HOST: str = os.getenv("DB_HOST", "127.0.0.1")
     DB_PORT: int = int(os.getenv("DB_PORT", "3306"))
-    DB_USER: str = os.getenv("DB_USER", "bioadmin")
-    DB_PASSWORD: str = os.getenv("DB_PASSWORD", "bioadmin123")
-    DB_NAME: str = os.getenv("DB_NAME", "bioinfohub")
+    DB_USER: str = os.getenv("DB_USER", "")
+    DB_PASSWORD: str = os.getenv("DB_PASSWORD", "")
+    DB_NAME: str = os.getenv("DB_NAME", "")
 
     @property
     def database_url(self) -> str:
