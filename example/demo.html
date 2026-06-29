@@ -3,476 +3,474 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BioinfoHub — 生物信息学工具发现平台</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+<title>BioinfoHub Demo — 生物信息学工具发现平台</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --color-primary: #1a365d;
-    --color-primary-light: #2c5282;
-    --color-bg: #faf9f6;
-    --color-surface: #ffffff;
-    --color-border: #e8e4df;
-    --color-text: #2c2c2c;
-    --color-text-secondary: #6b6b6b;
-    --color-text-tertiary: #9a9a9a;
-    --color-accent: #b8860b;
-    --color-success: #2d6a4f;
-  }
+/* ═══════════════ Design System ═══════════════ */
+:root {
+  --c-primary: #1a365d; --c-primary-l: #2c5282; --c-primary-bg: #edf2f7;
+  --c-bg: #faf9f6; --c-surface: #ffffff; --c-border: #e8e4df; --c-border2: #f0ede8;
+  --c-text: #2c2c2c; --c-text2: #6b6b6b; --c-text3: #9a9a9a;
+  --c-accent: #b8860b; --c-success: #2d6a4f; --c-error: #8b3a3a;
+  --ff-serif: 'Noto Serif SC', 'STSong', 'SimSun', serif;
+  --ff-sans: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --ff-mono: 'JetBrains Mono', 'Consolas', monospace;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.03); --shadow-md: 0 2px 8px rgba(0,0,0,0.06);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--ff-sans); font-size: 15px; color: var(--c-text); background: var(--c-bg); line-height: 1.6; }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+/* ═══════════════ Header ═══════════════ */
+.header { display:flex; align-items:center; padding:0 32px; background:var(--c-surface); border-bottom:1px solid var(--c-border); height:56px; position:sticky; top:0; z-index:100; }
+.logo { font-family:var(--ff-serif); font-weight:700; font-size:18px; color:var(--c-primary); margin-right:48px; }
+.nav { display:flex; gap:4px; }
+.nav-tab { display:inline-flex; align-items:center; height:54px; padding:0 20px; font-size:14px; cursor:pointer; color:var(--c-text2); border-bottom:2px solid transparent; transition:all .2s; }
+.nav-tab.active { font-weight:600; color:var(--c-primary); border-bottom-color:var(--c-primary); background:rgba(26,54,93,0.04); }
+.nav-tab:hover:not(.active) { color:var(--c-primary-l); background:rgba(26,54,93,0.03); }
+.content { max-width:1240px; margin:0 auto; padding:28px 32px; }
+.page { display:none; }
+.page.active { display:block; }
 
-  body {
-    font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-    font-size: 15px;
-    color: var(--color-text);
-    background: var(--color-bg);
-    line-height: 1.6;
-  }
+/* ═══════════════ Common ═══════════════ */
+.sec-title { font-family:var(--ff-serif); font-weight:700; font-size:20px; color:var(--c-primary); margin-bottom:20px; }
+.card { background:var(--c-surface); border:1px solid var(--c-border); border-radius:6px; box-shadow:var(--shadow-sm); }
+.badge { display:inline-flex; align-items:center; height:24px; padding:0 8px; font-size:12px; border-radius:3px; }
+.tag-row { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
 
-  /* Header */
-  .header {
-    display: flex;
-    align-items: center;
-    padding: 0 32px;
-    background: var(--color-surface);
-    border-bottom: 1px solid var(--color-border);
-    height: 56px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
+/* ═══════════════ Page 1: Tool List ═══════════════ */
+.search-bar { width:100%; max-width:420px; height:36px; padding:0 12px; border:1px solid var(--c-border); border-radius:4px; font-size:14px; font-family:inherit; background:var(--c-surface); outline:none; transition:border-color .2s; }
+.search-bar:focus { border-color:var(--c-primary-l); }
+.filter-btn { height:30px; padding:0 10px; font-size:13px; font-family:inherit; border:1px solid var(--c-border); border-radius:3px; background:var(--c-surface); color:var(--c-text2); cursor:pointer; transition:all .2s; }
+.filter-btn:hover { border-color:var(--c-primary-l); color:var(--c-primary); }
+.filter-btn.on { background:var(--c-primary); color:#fff; border-color:var(--c-primary); }
+.sort-bar { display:flex; border:1px solid var(--c-border); border-radius:4px; overflow:hidden; }
+.sort-btn { height:30px; padding:0 14px; font-size:13px; font-family:inherit; border:none; background:var(--c-surface); color:var(--c-text2); cursor:pointer; border-right:1px solid var(--c-border); transition:all .2s; }
+.sort-btn:last-child { border-right:none; }
+.sort-btn:hover { background:#f5f3f0; }
+.sort-btn.on { background:var(--c-primary); color:#fff; font-weight:600; }
+.stats-line { font-size:13px; color:var(--c-text2); margin-bottom:16px; }
+.stats-line strong { color:var(--c-primary); }
 
-  .logo {
-    font-family: 'Noto Serif SC', 'STSong', 'SimSun', serif;
-    font-weight: 700;
-    font-size: 18px;
-    color: var(--color-primary);
-    margin-right: 48px;
-    cursor: pointer;
-  }
+.tool-card { background:var(--c-surface); border:1px solid var(--c-border); border-left:3px solid transparent; border-radius:6px; padding:16px 20px; margin-bottom:10px; transition:all .2s; box-shadow:var(--shadow-sm); }
+.tool-card:hover { border-left-color:var(--c-primary); box-shadow:var(--shadow-md); }
+.tc-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px; }
+.tc-name { font-family:var(--ff-serif); font-weight:600; font-size:16px; color:var(--c-primary); }
+.tc-stars { color:var(--c-text2); font-size:13px; white-space:nowrap; margin-left:12px; }
+.tc-stars svg { fill:var(--c-accent); margin-right:4px; vertical-align:-1px; }
+.tc-desc { color:var(--c-text2); font-size:14px; line-height:1.5; margin-bottom:10px; }
+.badge-lang { border-color:#dce4ec; background:#edf2f7; color:var(--c-primary); }
+.badge-lic { border:1px solid var(--c-border); background:var(--c-bg); color:var(--c-text2); }
+.badge-cat { border:1px solid var(--c-border); background:var(--c-surface); color:var(--c-text2); }
+.badge-active { background:#e8f5e9; color:var(--c-success); border:none; }
+.badge-inactive { background:#fce4e4; color:var(--c-error); border:none; }
+.tc-time { font-size:12px; color:var(--c-text3); }
+.vgap8 { display:flex; flex-direction:column; gap:8px; }
+.vgap12 { display:flex; flex-direction:column; gap:12px; }
 
-  .nav { display: flex; gap: 4px; }
-  .nav-item {
-    display: inline-flex;
-    align-items: center;
-    height: 54px;
-    padding: 0 20px;
-    cursor: pointer;
-    font-size: 14px;
-    color: var(--color-text-secondary);
-    border-bottom: 2px solid transparent;
-    transition: all 0.2s;
-  }
-  .nav-item.active {
-    font-weight: 600;
-    color: var(--color-primary);
-    border-bottom-color: var(--color-primary);
-    background: rgba(26,54,93,0.04);
-  }
-  .nav-item:hover { color: var(--color-primary-light); }
+/* ═══════════════ Page 2: Trends ═══════════════ */
+.trend-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(320px,1fr)); gap:16px; }
+.trend-card { padding:20px; }
+.trend-card-title { font-family:var(--ff-serif); font-weight:600; font-size:14px; color:var(--c-primary); margin-bottom:16px; padding-bottom:10px; border-bottom:1px solid var(--c-border2); }
+.rank-item { display:flex; align-items:center; padding:10px 0; border-bottom:1px solid var(--c-border2); cursor:pointer; }
+.rank-item:last-child { border-bottom:none; }
+.rank-num { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:4px; font-size:12px; font-weight:700; margin-right:10px; flex-shrink:0; }
+.rank-num.top { background:var(--c-error); color:#fff; }
+.rank-num.norm { background:var(--c-border); color:var(--c-text3); }
+.rank-info { flex:1; min-width:0; }
+.rank-name { font-weight:500; font-size:14px; color:var(--c-text); }
+.rank-gain { font-size:13px; color:var(--c-text2); white-space:nowrap; }
+.rank-rate { font-size:12px; font-weight:600; margin-left:8px; white-space:nowrap; }
+.rank-rate.up { color:var(--c-success); }
+.rank-rate.down { color:var(--c-error); }
 
-  /* Content */
-  .content { max-width: 1240px; margin: 0 auto; padding: 28px 32px; }
+/* Simple chart bars */
+.chart-bar-group { display:flex; align-items:center; margin-bottom:8px; }
+.chart-bar-label { width:100px; font-size:12px; color:var(--c-text2); text-align:right; margin-right:10px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.chart-bar-track { flex:1; height:20px; background:var(--c-border2); border-radius:3px; overflow:hidden; position:relative; }
+.chart-bar-fill { height:100%; border-radius:3px; transition:width .4s; }
+.chart-bar-val { width:48px; font-size:11px; color:var(--c-text3); margin-left:8px; font-family:var(--ff-mono); }
+.chart-colors { --c1:#2c5282;--c2:#2d6a4f;--c3:#b8860b;--c4:#8b3a3a;--c5:#4a5568;--c6:#2b6cb0;--c7:#276749;--c8:#975a16; }
+.full-width { grid-column:1/-1; }
 
-  .page-title {
-    font-family: 'Noto Serif SC', serif;
-    font-weight: 700;
-    font-size: 20px;
-    color: var(--color-primary);
-    margin-bottom: 20px;
-  }
+.timeline-chart { display:flex; align-items:flex-end; gap:4px; height:180px; padding:0 4px; }
+.tc-bar-wrap { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; }
+.tc-bar { width:100%; max-width:24px; background:var(--c-primary); border-radius:2px 2px 0 0; transition:height .4s; }
+.tc-bar-label { font-size:10px; color:var(--c-text3); margin-top:4px; writing-mode:vertical-rl; text-orientation:mixed; }
 
-  /* Controls */
-  .controls { margin-bottom: 16px; }
-  .search-input {
-    width: 100%;
-    max-width: 400px;
-    height: 36px;
-    padding: 0 12px;
-    border: 1px solid var(--color-border);
-    border-radius: 4px;
-    font-size: 14px;
-    font-family: inherit;
-    background: var(--color-surface);
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .search-input:focus { border-color: var(--color-primary-light); }
+/* ═══════════════ Page 3: Compare ═══════════════ */
+.compare-add { margin-bottom:20px; }
+.compare-add input { width:100%; max-width:400px; height:36px; padding:0 12px; border:1px solid var(--c-border); border-radius:4px; font-size:14px; font-family:inherit; outline:none; }
+.compare-add input:focus { border-color:var(--c-primary-l); }
+.compare-hint { font-size:13px; color:var(--c-text3); margin-top:6px; }
+.cmp-table { width:100%; border-collapse:collapse; font-size:14px; }
+.cmp-table th,.cmp-table td { border:1px solid var(--c-border); padding:10px 14px; text-align:left; }
+.cmp-table th { background:var(--c-bg); font-family:var(--ff-serif); font-weight:600; color:var(--c-primary); font-size:13px; }
+.cmp-table .metric { font-weight:600; color:var(--c-primary); font-family:var(--ff-serif); }
+.cmp-highlight { color:var(--c-success); font-weight:700; }
+.cmp-tool-header { display:flex; align-items:center; justify-content:space-between; }
+.cmp-remove { border:none; background:none; color:var(--c-error); cursor:pointer; font-size:16px; padding:0 4px; line-height:1; }
+.cmp-empty { text-align:center; padding:60px; color:var(--c-text3); font-size:15px; }
+.cmp-controls { margin-bottom:16px; }
 
-  .filter-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
-    margin-top: 12px;
-  }
+/* ═══════════════ Footer ═══════════════ */
+.footer { margin-top:32px; padding:16px 0; border-top:1px solid var(--c-border); text-align:center; color:var(--c-text3); font-size:12px; }
 
-  .filter-tag {
-    display: inline-flex;
-    align-items: center;
-    height: 30px;
-    padding: 0 10px;
-    font-size: 13px;
-    border: 1px solid var(--color-border);
-    border-radius: 3px;
-    background: var(--color-surface);
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    transition: all 0.2s;
-    user-select: none;
-  }
-  .filter-tag:hover { border-color: var(--color-primary-light); color: var(--color-primary); }
-  .filter-tag.selected { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
-
-  .sort-group {
-    display: flex;
-    border: 1px solid var(--color-border);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-  .sort-btn {
-    height: 30px;
-    padding: 0 14px;
-    font-size: 13px;
-    font-family: inherit;
-    border: none;
-    background: var(--color-surface);
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    transition: all 0.2s;
-    border-right: 1px solid var(--color-border);
-  }
-  .sort-btn:last-child { border-right: none; }
-  .sort-btn:hover { background: #f5f3f0; }
-  .sort-btn.active { background: var(--color-primary); color: #fff; font-weight: 600; }
-
-  /* Tool List */
-  .tool-list { margin-top: 16px; }
-
-  .tool-card {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-left: 3px solid transparent;
-    border-radius: 6px;
-    padding: 16px 20px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
-  }
-  .tool-card:hover {
-    border-left-color: var(--color-primary);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  }
-
-  .tool-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 6px;
-  }
-
-  .tool-name {
-    font-family: 'Noto Serif SC', serif;
-    font-weight: 600;
-    font-size: 16px;
-    color: var(--color-primary);
-  }
-
-  .tool-stars {
-    color: var(--color-text-secondary);
-    font-size: 13px;
-    white-space: nowrap;
-    margin-left: 12px;
-  }
-  .tool-stars svg { fill: var(--color-accent); margin-right: 4px; vertical-align: -1px; }
-
-  .tool-desc {
-    color: var(--color-text-secondary);
-    font-size: 14px;
-    line-height: 1.5;
-    margin-bottom: 10px;
-  }
-
-  .tool-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    height: 24px;
-    padding: 0 8px;
-    font-size: 12px;
-    border-radius: 3px;
-    border: 1px solid var(--color-border);
-    background: var(--color-bg);
-    color: var(--color-text-secondary);
-  }
-  .badge.lang { border-color: #dce4ec; background: #edf2f7; color: var(--color-primary); }
-  .badge.cat  { color: var(--color-text-secondary); }
-
-  .tool-updated {
-    font-size: 12px;
-    color: var(--color-text-tertiary);
-    margin-left: 4px;
-  }
-
-  /* Stats bar */
-  .stats-bar {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 20px;
-    color: var(--color-text-secondary);
-    font-size: 13px;
-  }
-  .stats-bar strong { color: var(--color-primary); }
-
-  /* Footer note */
-  .footer-note {
-    margin-top: 40px;
-    padding: 16px 0;
-    border-top: 1px solid var(--color-border);
-    color: var(--color-text-tertiary);
-    font-size: 12px;
-    text-align: center;
-  }
+/* ═══════════════ Responsive ═══════════════ */
+@media (max-width:768px) {
+  .header { padding:0 16px; }
+  .content { padding:20px 16px; }
+  .trend-grid { grid-template-columns:1fr; }
+}
 </style>
 </head>
 <body>
 
+<!-- ═══════════════ HEADER ═══════════════ -->
 <div class="header">
   <div class="logo">BioinfoHub</div>
   <div class="nav">
-    <span class="nav-item active">工具列表</span>
-    <span class="nav-item">趋势面板</span>
-    <span class="nav-item">工具对比</span>
+    <span class="nav-tab active" data-page="list">工具列表</span>
+    <span class="nav-tab" data-page="trends">趋势面板</span>
+    <span class="nav-tab" data-page="compare">工具对比</span>
   </div>
 </div>
 
 <div class="content">
-  <div class="page-title">生物信息工具</div>
 
-  <div class="stats-bar">
-    <span>共 <strong id="total">8</strong> 个工具</span>
-    <span>★ 总计 <strong>168,629</strong></span>
-  </div>
+<!-- ═══════════════════════════════════════ -->
+<!-- PAGE 1: 工具列表                        -->
+<!-- ═══════════════════════════════════════ -->
+<div class="page active" id="page-list">
+  <div class="sec-title">生物信息工具</div>
+  <div class="stats-line">共 <strong id="stat-total">0</strong> 个工具，当前显示 <strong id="stat-shown">0</strong> 个</div>
 
-  <div class="controls">
-    <input class="search-input" type="text" placeholder="搜索工具名称或描述..." oninput="filterTools()" id="search">
+  <div class="vgap12" style="margin-bottom:16px">
+    <input class="search-bar" type="text" placeholder="搜索工具名称或描述..." id="search">
 
-    <div class="filter-row">
-      <span class="filter-tag" data-cat="all" onclick="toggleCat(this)" id="cat-all">全部</span>
-      <span class="filter-tag" data-cat="ngs" onclick="toggleCat(this)">NGS/高通量测序</span>
-      <span class="filter-tag" data-cat="transcriptomics" onclick="toggleCat(this)">转录组学</span>
-      <span class="filter-tag" data-cat="proteomics" onclick="toggleCat(this)">蛋白质组学</span>
-      <span class="filter-tag" data-cat="systems-bio" onclick="toggleCat(this)">系统生物学</span>
-      <span class="filter-tag" data-cat="drug-discovery" onclick="toggleCat(this)">药物发现</span>
+    <div class="tag-row" id="cat-filters">
+      <button class="filter-btn on" data-cat="all">全部</button>
+      <button class="filter-btn" data-cat="ngs">NGS/高通量测序</button>
+      <button class="filter-btn" data-cat="transcriptomics">转录组学</button>
+      <button class="filter-btn" data-cat="proteomics">蛋白质组学</button>
+      <button class="filter-btn" data-cat="metabolomics">代谢组学</button>
+      <button class="filter-btn" data-cat="systems-bio">系统生物学</button>
+      <button class="filter-btn" data-cat="drug-discovery">药物发现</button>
+      <button class="filter-btn" data-cat="single-cell">单细胞</button>
+      <button class="filter-btn" data-cat="structural-bio">结构生物学</button>
+    </div>
 
-      <span style="margin-left: 12px;"></span>
-      <div class="sort-group">
-        <button class="sort-btn active" data-sort="stars" onclick="sortTools(this)">最热</button>
-        <button class="sort-btn" data-sort="updated" onclick="sortTools(this)">最近更新</button>
-        <button class="sort-btn" data-sort="created" onclick="sortTools(this)">最新入库</button>
+    <div class="tag-row" style="justify-content:space-between">
+      <div class="tag-row" id="lang-filters">
+        <button class="filter-btn on" data-lang="all">全部语言</button>
+        <button class="filter-btn" data-lang="Python">Python</button>
+        <button class="filter-btn" data-lang="R">R</button>
+        <button class="filter-btn" data-lang="C">C</button>
+        <button class="filter-btn" data-lang="C++">C++</button>
+        <button class="filter-btn" data-lang="JavaScript">JavaScript</button>
+      </div>
+      <div class="sort-bar" id="sort-bar">
+        <button class="sort-btn on" data-sort="stars">★ 最热</button>
+        <button class="sort-btn" data-sort="updated">最近更新</button>
+        <button class="sort-btn" data-sort="created">最新入库</button>
       </div>
     </div>
   </div>
 
-  <div class="tool-list" id="tool-list"></div>
+  <div id="tool-list"></div>
+</div>
 
-  <div class="footer-note">
-    BioinfoHub Demo · 测试数据仅供展示 · 数据来源: GitHub / bio.tools
+<!-- ═══════════════════════════════════════ -->
+<!-- PAGE 2: 趋势面板                        -->
+<!-- ═══════════════════════════════════════ -->
+<div class="page" id="page-trends">
+  <div class="sec-title">趋势面板</div>
+
+  <div class="trend-grid">
+
+    <!-- Rising stars ranking -->
+    <div class="card trend-card">
+      <div class="trend-card-title">涨星最快 Top 8</div>
+      <div id="rising-list"></div>
+    </div>
+
+    <!-- Category distribution (bar chart) -->
+    <div class="card trend-card">
+      <div class="trend-card-title">分类分布</div>
+      <div class="chart-colors" id="cat-chart"></div>
+    </div>
+
+    <!-- Language distribution (bar chart) -->
+    <div class="card trend-card">
+      <div class="trend-card-title">编程语言分布</div>
+      <div class="chart-colors" id="lang-chart"></div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="card trend-card full-width">
+      <div class="trend-card-title" style="display:flex;justify-content:space-between;align-items:center">
+        <span>新增工具趋势 (近 12 个月)</span>
+        <span style="font-size:11px;color:var(--c-text3);font-weight:400;font-family:var(--ff-sans)">模拟数据</span>
+      </div>
+      <div class="timeline-chart" id="timeline"></div>
+    </div>
+
   </div>
 </div>
 
+<!-- ═══════════════════════════════════════ -->
+<!-- PAGE 3: 工具对比                        -->
+<!-- ═══════════════════════════════════════ -->
+<div class="page" id="page-compare">
+  <div class="sec-title">工具对比</div>
+  <p style="color:var(--c-text2);margin-bottom:20px;font-size:14px">最多对比 4 个工具。在下方输入框中搜索工具名称以添加对比。</p>
+
+  <div class="compare-add">
+    <input type="text" placeholder="搜索工具名称添加对比..." id="cmp-search" autocomplete="off">
+    <div style="position:relative">
+      <div id="cmp-suggestions" style="position:absolute;top:4px;left:0;right:0;max-width:400px;background:var(--c-surface);border:1px solid var(--c-border);border-radius:4px;box-shadow:var(--shadow-md);z-index:50;display:none"></div>
+    </div>
+    <div class="compare-hint">已添加 <strong id="cmp-count">0</strong>/4 个工具</div>
+  </div>
+
+  <div id="cmp-table-area">
+    <div class="cmp-empty">暂无对比工具，请在详情页或上方搜索添加</div>
+  </div>
+</div>
+
+<div class="footer">BioinfoHub Demo · 测试数据仅供展示 · 数据来源: GitHub / bio.tools</div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- DATA & LOGIC                            -->
+<!-- ═══════════════════════════════════════ -->
 <script>
-// ── Sample data ──────────────────────────────────────────────
-const tools = [
-  {
-    name: "Biopython",
-    slug: "biopython-biopython",
-    description: "Python tools for biological computation — sequence analysis, file parsing, BLAST, KEGG, and more.",
-    github_stars: 5093,
-    github_language: "Python",
-    github_license: "BSD",
-    github_updated_at: "2026-06-28",
-    categories: ["ngs", "proteomics"],
-    created_at: "2026-06-10"
-  },
-  {
-    name: "scientific-agent-skills",
-    slug: "k-dense-ai-scientific-agent-skills",
-    description: "Turn any AI agent into an AI Scientist. 140+ ready-to-use skills plus 100+ scientific databases covering biology, chemistry, medicine, and drug discovery.",
-    github_stars: 29575,
-    github_language: "Python",
-    github_license: "MIT",
-    github_updated_at: "2026-06-29",
-    categories: ["ngs", "proteomics", "drug-discovery"],
-    created_at: "2025-10-19"
-  },
-  {
-    name: "bwa",
-    slug: "lh3-bwa",
-    description: "Burrows-Wheeler Aligner — mapping DNA sequences against a large reference genome, essential for NGS variant calling pipelines.",
-    github_stars: 1753,
-    github_language: "C",
-    github_license: "GPL-3.0",
-    github_updated_at: "2026-05-12",
-    categories: ["ngs"],
-    created_at: "2026-03-01"
-  },
-  {
-    name: "AlphaFold3",
-    slug: "google-deepmind-alphafold3",
-    description: "Predicts the 3D structure and interactions of all biological molecules — proteins, DNA, RNA, and small molecules — with atomic accuracy.",
-    github_stars: 82341,
-    github_language: "Python",
-    github_license: "Apache-2.0",
-    github_updated_at: "2026-06-27",
-    categories: ["proteomics", "drug-discovery"],
-    created_at: "2024-11-01"
-  },
-  {
-    name: "Scanpy",
-    slug: "scverse-scanpy",
-    description: "Single-cell gene expression data analysis toolkit, widely used for scRNA-seq preprocessing, visualization, clustering, and trajectory inference.",
-    github_stars: 2104,
-    github_language: "Python",
-    github_license: "BSD",
-    github_updated_at: "2026-06-20",
-    categories: ["transcriptomics"],
-    created_at: "2026-01-15"
-  },
-  {
-    name: "CellChat",
-    slug: "jinworks-cellchat",
-    description: "Inference and analysis of cell-cell communication networks from single-cell transcriptomics data using ligand-receptor interactions.",
-    github_stars: 482,
-    github_language: "R",
-    github_license: "GPL-3.0",
-    github_updated_at: "2026-04-08",
-    categories: ["transcriptomics", "systems-bio"],
-    created_at: "2026-02-20"
-  },
-  {
-    name: "PyMOL",
-    slug: "schrodinger-pymol",
-    description: "Molecular visualization system producing high-quality 3D images of small molecules, biological macromolecules, and trajectories.",
-    github_stars: 1384,
-    github_language: "Python",
-    github_license: "BSD",
-    github_updated_at: "2026-06-15",
-    categories: ["proteomics"],
-    created_at: "2025-09-10"
-  },
-  {
-    name: "DESeq2",
-    slug: "thelovelab-deseq2",
-    description: "Differential gene expression analysis based on the negative binomial distribution, standard tool for RNA-seq count data analysis.",
-    github_stars: 45897,
-    github_language: "R",
-    github_license: "GPL-3.0",
-    github_updated_at: "2026-05-30",
-    categories: ["transcriptomics", "systems-bio"],
-    created_at: "2025-11-20"
-  }
+// ── Sample Data (20 tools, 9 categories) ───────────────────
+const TOOLS = [
+  {id:1, name:"AlphaFold3", slug:"google-deepmind-alphafold3", desc:"Predict 3D structures and interactions of all biological molecules — proteins, DNA, RNA, small molecules — with atomic accuracy.", github_stars:82341, github_forks:4120, github_open_issues:215, github_language:"Python", github_license:"Apache-2.0", github_updated_at:"2026-06-27", github_created_at:"2024-11-01", categories:["proteomics","drug-discovery"], is_active:true, created_at:"2024-11-01"},
+  {id:2, name:"DESeq2", slug:"thelovelab-deseq2", desc:"Differential gene expression analysis based on negative binomial distribution. Standard tool for RNA-seq count data.", github_stars:45897, github_forks:2380, github_open_issues:142, github_language:"R", github_license:"GPL-3.0", github_updated_at:"2026-05-30", github_created_at:"2014-09-15", categories:["transcriptomics","systems-bio"], is_active:true, created_at:"2025-11-20"},
+  {id:3, name:"scientific-agent-skills", slug:"k-dense-ai-scientific-agent-skills", desc:"Turn any AI agent into an AI Scientist. 140+ ready-to-use skills plus 100+ scientific databases covering biology, chemistry, medicine.", github_stars:29575, github_forks:1890, github_open_issues:87, github_language:"Python", github_license:"MIT", github_updated_at:"2026-06-29", github_created_at:"2025-10-19", categories:["ngs","proteomics","drug-discovery"], is_active:true, created_at:"2025-10-19"},
+  {id:4, name:"Biopython", slug:"biopython-biopython", desc:"Python tools for biological computation — sequence analysis, file parsing, BLAST, KEGG, protein structure and more.", github_stars:5093, github_forks:1640, github_open_issues:95, github_language:"Python", github_license:"BSD", github_updated_at:"2026-06-28", github_created_at:"2009-07-09", categories:["ngs","proteomics"], is_active:true, created_at:"2026-06-10"},
+  {id:5, name:"Scanpy", slug:"scverse-scanpy", desc:"Single-cell gene expression data analysis. Preprocessing, visualization, clustering, trajectory inference for scRNA-seq.", github_stars:2104, github_forks:680, github_open_issues:200, github_language:"Python", github_license:"BSD", github_updated_at:"2026-06-20", github_created_at:"2017-05-15", categories:["single-cell","transcriptomics"], is_active:true, created_at:"2026-01-15"},
+  {id:6, name:"bwa", slug:"lh3-bwa", desc:"Burrows-Wheeler Aligner — mapping DNA sequences against large reference genomes. Essential for NGS variant calling pipelines.", github_stars:1753, github_forks:520, github_open_issues:88, github_language:"C", github_license:"GPL-3.0", github_updated_at:"2026-05-12", github_created_at:"2011-05-25", categories:["ngs"], is_active:true, created_at:"2011-05-25"},
+  {id:7, name:"CellChat", slug:"jinworks-cellchat", desc:"Inference and analysis of cell-cell communication networks from single-cell transcriptomics using ligand-receptor interactions.", github_stars:482, github_forks:124, github_open_issues:52, github_language:"R", github_license:"GPL-3.0", github_updated_at:"2026-04-08", github_created_at:"2020-01-20", categories:["transcriptomics","systems-bio","single-cell"], is_active:true, created_at:"2026-02-20"},
+  {id:8, name:"PyMOL", slug:"schrodinger-pymol", desc:"Molecular visualization system producing high-quality 3D images of small molecules and biological macromolecules.", github_stars:1384, github_forks:410, github_open_issues:178, github_language:"Python", github_license:"BSD", github_updated_at:"2026-06-15", github_created_at:"2015-03-01", categories:["proteomics","structural-bio"], is_active:true, created_at:"2025-09-10"},
+  {id:9, name:"STAR", slug:"alexdobin-star", desc:"Spliced Transcripts Alignment to a Reference — ultrafast RNA-seq aligner with high sensitivity for junction discovery.", github_stars:1120, github_forks:380, github_open_issues:134, github_language:"C++", github_license:"GPL-3.0", github_updated_at:"2026-06-01", github_created_at:"2013-01-01", categories:["transcriptomics","ngs"], is_active:true, created_at:"2025-12-01"},
+  {id:10, name:"GATK", slug:"broadinstitute-gatk", desc:"Genome Analysis Toolkit — industry standard for variant discovery in high-throughput sequencing data.", github_stars:1860, github_forks:590, github_open_issues:310, github_language:"Java", github_license:"BSD", github_updated_at:"2026-06-22", github_created_at:"2012-06-01", categories:["ngs"], is_active:true, created_at:"2012-06-01"},
+  {id:11, name:"AlphaPept", slug:"mannlabs-alphapept", desc:"Modular, Python-based framework for proteomics data analysis with high-performance computing support.", github_stars:324, github_forks:42, github_open_issues:18, github_language:"Python", github_license:"Apache-2.0", github_updated_at:"2026-05-08", github_created_at:"2020-06-15", categories:["proteomics"], is_active:true, created_at:"2025-08-15"},
+  {id:12, name:"MetaboAnalystR", slug:"xia-lab-metaboanalystr", desc:"R package for comprehensive metabolomics data analysis — statistical, functional, and integrative analysis of metabolomics data.", github_stars:198, github_forks:85, github_open_issues:33, github_language:"R", github_license:"GPL-3.0", github_updated_at:"2026-03-15", github_created_at:"2018-11-01", categories:["metabolomics","systems-bio"], is_active:true, created_at:"2026-03-01"},
+  {id:13, name:"OpenMS", slug:"openms-openms", desc:"C++ library and tools for LC-MS data management and analyses in proteomics and metabolomics.", github_stars:412, github_forks:145, github_open_issues:89, github_language:"C++", github_license:"BSD", github_updated_at:"2026-06-10", github_created_at:"2016-02-01", categories:["proteomics","metabolomics"], is_active:true, created_at:"2025-07-20"},
+  {id:14, name:"RDKit", slug:"rdkit-rdkit", desc:"Collection of cheminformatics and machine-learning tools for drug discovery, written in C++ with Python wrappers.", github_stars:2870, github_forks:870, github_open_issues:234, github_language:"C++", github_license:"BSD", github_updated_at:"2026-06-25", github_created_at:"2014-01-01", categories:["drug-discovery"], is_active:true, created_at:"2014-01-01"},
+  {id:15, name:"Cytoscape.js", slug:"cytoscape-cytoscape-js", desc:"Graph theory library for visualization and analysis of biological networks and molecular interaction data.", github_stars:10210, github_forks:1680, github_open_issues:156, github_language:"JavaScript", github_license:"MIT", github_updated_at:"2026-06-18", github_created_at:"2012-10-15", categories:["systems-bio","drug-discovery"], is_active:true, created_at:"2025-10-01"},
+  {id:16, name:"Nextflow", slug:"nextflow-io-nextflow", desc:"Scalable and reproducible scientific workflows using software containers. Widely adopted for bioinformatics pipelines.", github_stars:2780, github_forks:610, github_open_issues:198, github_language:"Java", github_license:"Apache-2.0", github_updated_at:"2026-06-26", github_created_at:"2013-08-01", categories:["ngs","transcriptomics"], is_active:true, created_at:"2013-08-01"},
+  {id:17, name:"ChimeraX", slug:"rbvi-chimerax", desc:"Next-generation molecular visualization program for cryo-EM, X-ray crystallography, and NMR structure analysis.", github_stars:890, github_forks:210, github_open_issues:445, github_language:"Python", github_license:"UCSF", github_updated_at:"2026-06-14", github_created_at:"2018-01-01", categories:["structural-bio","proteomics"], is_active:true, created_at:"2025-06-01"},
+  {id:18, name:"Seurat", slug:"satijalab-seurat", desc:"R toolkit for single-cell genomics — QC, analysis, and exploration of single-cell RNA-seq data with 3D visualization.", github_stars:2650, github_forks:920, github_open_issues:312, github_language:"R", github_license:"GPL-3.0", github_updated_at:"2026-06-24", github_created_at:"2015-10-01", categories:["single-cell","transcriptomics"], is_active:true, created_at:"2025-09-01"},
+  {id:19, name:"MAFFT", slug:"gcb-mafft", desc:"Multiple sequence alignment program for amino acid or nucleotide sequences. High speed and accuracy for large datasets.", github_stars:76, github_forks:32, github_open_issues:8, github_language:"C", github_license:"BSD", github_updated_at:"2025-12-20", github_created_at:"2018-06-01", categories:["ngs","proteomics"], is_active:false, created_at:"2025-12-20"},
+  {id:20, name:"AutoDock Vina", slug:"ccsb-autodock-vina", desc:"Molecular docking and virtual screening program for drug discovery. Fast and accurate binding pose prediction.", github_stars:634, github_forks:198, github_open_issues:67, github_language:"C++", github_license:"Apache-2.0", github_updated_at:"2026-02-10", github_created_at:"2015-01-01", categories:["drug-discovery","structural-bio"], is_active:true, created_at:"2025-04-01"}
 ];
 
-const categoryNames = {
-  "ngs": "NGS/高通量测序",
-  "transcriptomics": "转录组学",
-  "proteomics": "蛋白质组学",
-  "systems-bio": "系统生物学",
-  "drug-discovery": "药物发现"
-};
+const CAT_NAMES = {"ngs":"NGS/高通量测序","transcriptomics":"转录组学","proteomics":"蛋白质组学","metabolomics":"代谢组学","systems-bio":"系统生物学","drug-discovery":"药物发现","single-cell":"单细胞","structural-bio":"结构生物学"};
 
-let currentSort = "stars";
-let selectedCat = "all";
+// ── Simulated rising stars data ────────────────────────────
+const RISING = [
+  {name:"scientific-agent-skills",slug:"k-dense-ai-scientific-agent-skills",stars_start:18400,stars_end:29575,stars_gained:11175,growth_rate:60.7},
+  {name:"AlphaFold3",slug:"google-deepmind-alphafold3",stars_start:56100,stars_end:82341,stars_gained:26241,growth_rate:46.7},
+  {name:"DESeq2",slug:"thelovelab-deseq2",stars_start:39200,stars_end:45897,stars_gained:6697,growth_rate:17.1},
+  {name:"Biopython",slug:"biopython-biopython",stars_start:4800,stars_end:5093,stars_gained:293,growth_rate:6.1},
+  {name:"Cytoscape.js",slug:"cytoscape-cytoscape-js",stars_start:9210,stars_end:10210,stars_gained:1000,growth_rate:10.9},
+  {name:"Seurat",slug:"satijalab-seurat",stars_start:2340,stars_end:2650,stars_gained:310,growth_rate:13.2},
+  {name:"Nextflow",slug:"nextflow-io-nextflow",stars_start:2510,stars_end:2780,stars_gained:270,growth_rate:10.8},
+  {name:"RDKit",slug:"rdkit-rdkit",stars_start:2610,stars_end:2870,stars_gained:260,growth_rate:10.0},
+];
 
-// ── Render ──────────────────────────────────────────────────
-function renderTools(filtered) {
-  const list = document.getElementById("tool-list");
-  document.getElementById("total").textContent = filtered.length;
+// ── Chart data ─────────────────────────────────────────────
+const CAT_COUNTS = [{name:"NGS/高通量测序",count:7},{name:"转录组学",count:5},{name:"蛋白质组学",count:6},{name:"代谢组学",count:2},{name:"系统生物学",count:4},{name:"药物发现",count:4},{name:"单细胞",count:3},{name:"结构生物学",count:3}];
+const LANG_COUNTS = [{name:"Python",count:7},{name:"R",count:4},{name:"C++",count:3},{name:"C",count:2},{name:"Java",count:2},{name:"JavaScript",count:1}];
+const TIMELINE = [{date:"2025-07",count:2},{date:"2025-08",count:5},{date:"2025-09",count:4},{date:"2025-10",count:7},{date:"2025-11",count:3},{date:"2025-12",count:5},{date:"2026-01",count:4},{date:"2026-02",count:2},{date:"2026-03",count:6},{date:"2026-04",count:5},{date:"2026-05",count:4},{date:"2026-06",count:3}];
+const CHART_COLORS = ["#2c5282","#2d6a4f","#b8860b","#8b3a3a","#4a5568","#2b6cb0","#276749","#975a16","#744210","#63171b"];
 
-  list.innerHTML = filtered.map(t => {
-    const desc = t.description || "暂无描述";
-    const shortDesc = desc.length > 120 ? desc.slice(0, 120) + "…" : desc;
-    const updated = t.github_updated_at
-      ? new Date(t.github_updated_at).toLocaleDateString("zh-CN")
-      : null;
-    const catBadges = (t.categories || []).map(c =>
-      `<span class="badge cat">${categoryNames[c] || c}</span>`
-    ).join("");
+// ═══════════════ PAGE SWITCHING ════════════════════════════
+document.querySelectorAll(".nav-tab").forEach(tab => {
+  tab.addEventListener("click", function() {
+    document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
+    this.classList.add("active");
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    document.getElementById("page-"+this.dataset.page).classList.add("active");
+  });
+});
 
-    return `
-      <div class="tool-card" onclick="alert('工具: ${t.name}\\nStars: ${t.github_stars.toLocaleString()}\\n语言: ${t.github_language || "—"}\\n协议: ${t.github_license || "—"}')">
-        <div class="tool-card-header">
-          <span class="tool-name">${t.name}</span>
-          <span class="tool-stars">
-            <svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-            ${t.github_stars.toLocaleString()}
-          </span>
-        </div>
-        <div class="tool-desc">${shortDesc}</div>
-        <div class="tool-meta">
-          ${t.github_language ? `<span class="badge lang">${t.github_language}</span>` : ""}
-          ${t.github_license ? `<span class="badge">${t.github_license}</span>` : ""}
-          ${catBadges}
-          ${updated ? `<span class="tool-updated">&#128339; ${updated}</span>` : ""}
-        </div>
-      </div>`;
+// ═══════════════ PAGE 1: TOOL LIST ═════════════════════════
+let listCat = "all", listLang = "all", listSort = "stars";
+
+function renderToolList() {
+  let items = [...TOOLS];
+  const q = document.getElementById("search").value.toLowerCase().trim();
+  if (q) items = items.filter(t => t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q));
+  if (listCat !== "all") items = items.filter(t => t.categories.includes(listCat));
+  if (listLang !== "all") items = items.filter(t => t.github_language === listLang);
+
+  if (listSort === "stars") items.sort((a,b) => b.github_stars - a.github_stars);
+  else if (listSort === "updated") items.sort((a,b) => b.github_updated_at.localeCompare(a.github_updated_at));
+  else items.sort((a,b) => b.created_at.localeCompare(a.created_at));
+
+  document.getElementById("stat-total").textContent = TOOLS.length;
+  document.getElementById("stat-shown").textContent = items.length;
+
+  document.getElementById("tool-list").innerHTML = items.map(t => {
+    const desc = t.desc.length > 120 ? t.desc.slice(0,120)+"…" : t.desc;
+    const upd = t.github_updated_at ? new Date(t.github_updated_at).toLocaleDateString("zh-CN") : null;
+    return `<div class="tool-card">
+      <div class="tc-top">
+        <span class="tc-name">${t.name}</span>
+        <span class="tc-stars"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>${t.github_stars.toLocaleString()}</span>
+      </div>
+      <div class="tc-desc">${desc}</div>
+      <div class="tag-row">
+        ${t.github_language?`<span class="badge badge-lang">${t.github_language}</span>`:''}
+        ${t.github_license?`<span class="badge badge-lic">${t.github_license}</span>`:''}
+        ${t.categories.map(c=>`<span class="badge badge-cat">${CAT_NAMES[c]||c}</span>`).join('')}
+        ${t.is_active?'<span class="badge badge-active">活跃</span>':'<span class="badge badge-inactive">停更</span>'}
+        ${upd?`<span class="tc-time" style="margin-left:4px">🕐 ${upd}</span>`:''}
+      </div>
+    </div>`;
   }).join("");
 }
 
-// ── Filter & Sort ──────────────────────────────────────────
-function getFiltered() {
-  let result = [...tools];
+document.getElementById("search").addEventListener("input", renderToolList);
 
-  // search
-  const q = document.getElementById("search").value.toLowerCase();
-  if (q) {
-    result = result.filter(t =>
-      t.name.toLowerCase().includes(q) ||
-      (t.description || "").toLowerCase().includes(q)
-    );
+document.querySelectorAll("#cat-filters .filter-btn").forEach(b => {
+  b.addEventListener("click", function() {
+    document.querySelectorAll("#cat-filters .filter-btn").forEach(x=>x.classList.remove("on"));
+    this.classList.add("on"); listCat = this.dataset.cat; renderToolList();
+  });
+});
+document.querySelectorAll("#lang-filters .filter-btn").forEach(b => {
+  b.addEventListener("click", function() {
+    document.querySelectorAll("#lang-filters .filter-btn").forEach(x=>x.classList.remove("on"));
+    this.classList.add("on"); listLang = this.dataset.lang; renderToolList();
+  });
+});
+document.querySelectorAll("#sort-bar .sort-btn").forEach(b => {
+  b.addEventListener("click", function() {
+    document.querySelectorAll("#sort-bar .sort-btn").forEach(x=>x.classList.remove("on"));
+    this.classList.add("on"); listSort = this.dataset.sort; renderToolList();
+  });
+});
+
+// ═══════════════ PAGE 2: TRENDS ════════════════════════════
+function renderRising() {
+  document.getElementById("rising-list").innerHTML = RISING.map((r,i)=>{
+    return `<div class="rank-item">
+      <span class="rank-num ${i<3?'top':'norm'}">${i+1}</span>
+      <div class="rank-info"><div class="rank-name">${r.name}</div></div>
+      <span class="rank-gain">+${r.stars_gained.toLocaleString()} ★</span>
+      <span class="rank-rate ${r.growth_rate>=0?'up':'down'}">▲ ${r.growth_rate}%</span>
+    </div>`;
+  }).join("");
+}
+
+function renderBarChart(containerId, data, maxVal) {
+  const max = maxVal || Math.max(...data.map(d=>d.count));
+  document.getElementById(containerId).innerHTML = data.map((d,i)=>{
+    const pct = Math.round(d.count/max*100);
+    return `<div class="chart-bar-group">
+      <span class="chart-bar-label">${d.name}</span>
+      <div class="chart-bar-track"><div class="chart-bar-fill" style="width:${pct}%;background:${CHART_COLORS[i%CHART_COLORS.length]}"></div></div>
+      <span class="chart-bar-val">${d.count}</span>
+    </div>`;
+  }).join("");
+}
+
+function renderTimeline() {
+  const max = Math.max(...TIMELINE.map(d=>d.count));
+  document.getElementById("timeline").innerHTML = TIMELINE.map(d=>{
+    const h = Math.round(d.count/max*160);
+    return `<div class="tc-bar-wrap"><div class="tc-bar" style="height:${h}px;background:${d.count===max?'var(--c-error)':'var(--c-primary)'}"></div><span class="tc-bar-label">${d.date.slice(5)}</span></div>`;
+  }).join("");
+}
+
+// ═══════════════ PAGE 3: COMPARE ════════════════════════════
+let cmpSlugs = [];
+
+function addCompare(slug) {
+  if (cmpSlugs.length >= 4) { alert("最多对比 4 个工具"); return; }
+  if (cmpSlugs.includes(slug)) { alert("已在对比列表中"); return; }
+  cmpSlugs.push(slug);
+  renderCompare();
+  document.getElementById("cmp-search").value = "";
+  document.getElementById("cmp-suggestions").style.display = "none";
+}
+
+function removeCompare(slug) {
+  cmpSlugs = cmpSlugs.filter(s => s !== slug);
+  renderCompare();
+}
+
+function renderCompare() {
+  const items = cmpSlugs.map(s => TOOLS.find(t => t.slug === s)).filter(Boolean);
+  document.getElementById("cmp-count").textContent = items.length;
+
+  if (items.length === 0) {
+    document.getElementById("cmp-table-area").innerHTML = '<div class="cmp-empty">暂无对比工具，请在详情页或上方搜索添加</div>';
+    return;
   }
 
-  // category
-  if (selectedCat !== "all") {
-    result = result.filter(t => (t.categories || []).includes(selectedCat));
+  const maxStars = Math.max(...items.map(t=>t.github_stars));
+  const rows = [
+    {label:"Stars", key:"github_stars", fmt:v=>v.toLocaleString(), hi:v=>v===maxStars&&maxStars>0},
+    {label:"Forks", key:"github_forks", fmt:v=>v.toLocaleString()},
+    {label:"Open Issues", key:"github_open_issues", fmt:v=>v.toLocaleString()},
+    {label:"语言", key:"github_language", fmt:v=>v||"—"},
+    {label:"协议", key:"github_license", fmt:v=>v||"—"},
+    {label:"活跃度", key:"is_active", fmt:v=>v?'<span class="badge badge-active">活跃</span>':'<span class="badge badge-inactive">停更</span>'},
+    {label:"GitHub 创建", key:"github_created_at", fmt:v=>v?new Date(v).toLocaleDateString("zh-CN"):"—"},
+    {label:"最近更新", key:"github_updated_at", fmt:v=>v?new Date(v).toLocaleDateString("zh-CN"):"—"},
+    {label:"分类", key:"categories", fmt:v=>v.map(c=>`<span class="badge badge-cat">${CAT_NAMES[c]||c}</span>`).join(" ")}
+  ];
+
+  let html = '<table class="cmp-table"><thead><tr><th>指标</th>';
+  items.forEach(t => {
+    html += `<th><div class="cmp-tool-header"><span>${t.name}</span><button class="cmp-remove" onclick="removeCompare('${t.slug}')" title="移除">✕</button></div></th>`;
+  });
+  html += '</tr></thead><tbody>';
+  rows.forEach(r => {
+    html += `<tr><td class="metric">${r.label}</td>`;
+    items.forEach(t => {
+      const val = r.key ? t[r.key] : "";
+      const cls = r.hi && r.hi(val) ? " cmp-highlight" : "";
+      html += `<td${cls?` class="${cls}"`:""}>${r.fmt ? r.fmt(val) : val}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  document.getElementById("cmp-table-area").innerHTML = html;
+}
+
+// Compare search suggestions
+document.getElementById("cmp-search").addEventListener("input", function() {
+  const q = this.value.toLowerCase().trim();
+  const box = document.getElementById("cmp-suggestions");
+  if (!q) { box.style.display = "none"; return; }
+  const matches = TOOLS.filter(t => t.name.toLowerCase().includes(q) && !cmpSlugs.includes(t.slug)).slice(0,6);
+  if (matches.length === 0) { box.style.display = "none"; return; }
+  box.style.display = "block";
+  box.innerHTML = matches.map(t => `
+    <div style="padding:8px 14px;cursor:pointer;font-size:14px;border-bottom:1px solid var(--c-border2);display:flex;justify-content:space-between" onmousedown="addCompare('${t.slug}')">
+      <span>${t.name}</span><span style="color:var(--c-text3);font-size:13px">★ ${t.github_stars.toLocaleString()}</span>
+    </div>
+  `).join("");
+});
+document.addEventListener("click", function(e) {
+  if (!e.target.closest("#cmp-search") && !e.target.closest("#cmp-suggestions")) {
+    document.getElementById("cmp-suggestions").style.display = "none";
   }
+});
 
-  // sort
-  if (currentSort === "stars") {
-    result.sort((a, b) => b.github_stars - a.github_stars);
-  } else if (currentSort === "updated") {
-    result.sort((a, b) => (b.github_updated_at || "").localeCompare(a.github_updated_at || ""));
-  } else {
-    result.sort((a, b) => (b.created_at || "").localeCompare(a.created_at || ""));
-  }
-
-  return result;
-}
-
-function filterTools() {
-  renderTools(getFiltered());
-}
-
-function toggleCat(el) {
-  document.querySelectorAll(".filter-tag[data-cat]").forEach(t => t.classList.remove("selected"));
-  el.classList.add("selected");
-  selectedCat = el.dataset.cat;
-  filterTools();
-}
-
-function sortTools(el) {
-  document.querySelectorAll(".sort-btn").forEach(b => b.classList.remove("active"));
-  el.classList.add("active");
-  currentSort = el.dataset.sort;
-  filterTools();
-}
-
-// ── Init ────────────────────────────────────────────────────
-document.getElementById("cat-all").classList.add("selected");
-renderTools(getFiltered());
+// ═══════════════ INIT ═══════════════════════════════════════
+renderToolList();
+renderRising();
+renderBarChart("cat-chart", CAT_COUNTS, 8);
+renderBarChart("lang-chart", LANG_COUNTS, 7);
+renderTimeline();
 </script>
 </body>
 </html>
