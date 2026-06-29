@@ -26,8 +26,13 @@ logs/
 .DS_Store
 Thumbs.db
 
-# Claude Code local settings (machine-specific)
-.claude/settings.local.json
+# Claude Code (machine-specific, not for publishing)
+.claude/
+CLAUDE.md
+
+# Project planning docs (not code)
+项目立项说明.md
+项目详细规划.md
 
 # Environment
 .env
