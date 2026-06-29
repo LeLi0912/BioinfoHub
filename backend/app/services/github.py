@@ -137,6 +137,39 @@ def infer_categories_from_topics(topics: list) -> list[str]:
     return list(slugs)
 
 
+def _parse_owner_repo(github_url: str) -> tuple[str | None, str | None]:
+    """Extract owner/repo from a GitHub URL like https://github.com/owner/repo"""
+    import re
+    m = re.match(r"https?://github\.com/([^/]+)/([^/\s#?.]+)", github_url, re.IGNORECASE)
+    if not m:
+        return None, None
+    owner = m.group(1)
+    repo = m.group(2).removesuffix(".git")
+    return owner, repo
+
+
+async def get_repo_stats(github_url: str, client: httpx.AsyncClient) -> dict | None:
+    """Fetch stars, forks, issues, license, and language for a single GitHub repo."""
+    owner, repo = _parse_owner_repo(github_url)
+    if not owner or not repo:
+        return None
+    url = f"{settings.GITHUB_API_BASE}/repos/{owner}/{repo}"
+    data = await _github_request(url, client)
+    if not data:
+        return None
+    return {
+        "github_stars": data.get("stargazers_count", 0),
+        "github_forks": data.get("forks_count", 0),
+        "github_open_issues": data.get("open_issues_count", 0),
+        "github_license": (data.get("license") or {}).get("spdx_id", "")[:100] if data.get("license") else None,
+        "github_language": (data.get("language") or "")[:50] if data.get("language") else None,
+        "github_topics": data.get("topics", []),
+        "github_description": (data.get("description") or "")[:2000],
+        "github_updated_at": _parse_iso_datetime(data.get("updated_at")),
+        "github_created_at": _parse_iso_datetime(data.get("created_at")),
+    }
+
+
 def extract_tool_data(repo: dict) -> dict:
     topics = repo.get("topics", []) or []
     return {

@@ -94,14 +94,18 @@ def extract_tool_data(biotool: dict) -> dict:
     pub_title = None
     if publications:
         doi = publications[0].get("doi")
-        pub_title = publications[0].get("title") or publications[0].get("metadata", {}).get("title")
+        pub_title = publications[0].get("title") or (publications[0].get("metadata") or {}).get("title")
 
-    credit = biotool.get("credit", [])
-    developer = None
-    for c in credit:
-        if c.get("typeEntity") == "Person" and c.get("typeRole") == "Developer":
-            developer = c.get("name")
-            break
+    github_url = None
+    for link in biotool.get("link", []):
+        link_types = link.get("type", [])
+        if isinstance(link_types, str):
+            link_types = [link_types]
+        if "Repository" in link_types:
+            url = link.get("url", "")
+            if "github.com" in url:
+                github_url = url[:512]
+                break
 
     return {
         "name": name,
@@ -112,6 +116,6 @@ def extract_tool_data(biotool: dict) -> dict:
         "biotools_id": biotools_id,
         "publication_doi": doi,
         "publication_title": pub_title,
-        "github_url": None,
+        "github_url": github_url,
         "category_slugs": category_slugs,
     }

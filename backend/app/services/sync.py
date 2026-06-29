@@ -129,6 +129,17 @@ async def _sync_biotools(client: httpx.AsyncClient) -> tuple[int, int, int, int]
         try:
             data = biotools_svc.extract_tool_data(bt)
             category_slugs = data.pop("category_slugs", [])
+
+            github_url = data.get("github_url")
+            if github_url:
+                try:
+                    gh_data = await github_svc.get_repo_stats(github_url, client)
+                    if gh_data:
+                        data.update(gh_data)
+                        logger.debug(f"GitHub enrichment: {github_url} -> stars={gh_data.get('github_stars', 0)}")
+                except Exception:
+                    pass
+
             async with async_session_factory() as session:
                 result = await _upsert_tool(session, data, source_categories=category_slugs)
                 await session.commit()
