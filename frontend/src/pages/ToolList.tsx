@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { List, Pagination, Select, Typography, Space, Empty, Spin, Radio } from 'antd';
+import { List, Pagination, Typography, Space, Empty, Spin, Radio } from 'antd';
 import SearchBar from '../components/SearchBar';
 import FilterPanel from '../components/FilterPanel';
 import ToolCard from '../components/ToolCard';
@@ -33,7 +33,17 @@ const ToolList: React.FC = () => {
 
   return (
     <div>
-      <Typography.Title level={3}>生物信息工具</Typography.Title>
+      <Typography.Title
+        level={3}
+        style={{
+          fontFamily: "'Noto Serif SC', 'STSong', 'SimSun', serif",
+          fontWeight: 700,
+          color: '#1a365d',
+          marginBottom: 20,
+        }}
+      >
+        生物信息工具
+      </Typography.Title>
 
       <Space direction="vertical" style={{ width: '100%' }} size="middle">
         <SearchBar value={searchText} onChange={setSearchText} />
@@ -69,20 +79,23 @@ const ToolList: React.FC = () => {
             <List
               dataSource={items}
               renderItem={(tool) => <ToolCard tool={tool} />}
+              split={false}
             />
           )}
         </Spin>
 
         {total > 0 && (
-          <Pagination
-            current={params.page}
-            pageSize={params.page_size}
-            total={total}
-            onChange={(page, page_size) => setParams((p) => ({ ...p, page, page_size }))}
-            showSizeChanger
-            pageSizeOptions={PAGE_SIZE_OPTIONS}
-            showTotal={(t) => `共 ${t} 个工具`}
-          />
+          <div style={{ textAlign: 'center', marginTop: 16 }}>
+            <Pagination
+              current={params.page}
+              pageSize={params.page_size}
+              total={total}
+              onChange={(page, page_size) => setParams((p) => ({ ...p, page, page_size }))}
+              showSizeChanger
+              pageSizeOptions={PAGE_SIZE_OPTIONS}
+              showTotal={(t) => `共 ${t} 个工具`}
+            />
+          </div>
         )}
       </Space>
     </div>

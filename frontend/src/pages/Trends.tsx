@@ -25,11 +25,27 @@ const Trends: React.FC = () => {
 
   return (
     <div>
-      <Typography.Title level={3}>趋势面板</Typography.Title>
+      <Typography.Title
+        level={3}
+        style={{
+          fontFamily: "'Noto Serif SC', 'STSong', 'SimSun', serif",
+          fontWeight: 700,
+          color: '#1a365d',
+          marginBottom: 20,
+        }}
+      >
+        趋势面板
+      </Typography.Title>
 
       <Row gutter={[16, 16]}>
         <Col xs={24} md={12} lg={8}>
-          <Card>
+          <Card
+            style={{
+              borderRadius: 6,
+              border: '1px solid #e8e4df',
+              boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
+            }}
+          >
             {rising.length > 0 ? (
               <HotToolRanking data={rising.slice(0, 10)} />
             ) : (
@@ -39,7 +55,13 @@ const Trends: React.FC = () => {
         </Col>
 
         <Col xs={24} md={12} lg={8}>
-          <Card>
+          <Card
+            style={{
+              borderRadius: 6,
+              border: '1px solid #e8e4df',
+              boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
+            }}
+          >
             {pieData.length > 0 ? (
               <TrendChart option={createPieOption(pieData, '分类分布')} />
             ) : (
@@ -49,7 +71,13 @@ const Trends: React.FC = () => {
         </Col>
 
         <Col xs={24} md={12} lg={8}>
-          <Card>
+          <Card
+            style={{
+              borderRadius: 6,
+              border: '1px solid #e8e4df',
+              boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
+            }}
+          >
             {barData.length > 0 ? (
               <TrendChart option={createBarOption(barData, '编程语言分布 (Top 20)')} />
             ) : (
@@ -60,7 +88,11 @@ const Trends: React.FC = () => {
 
         <Col span={24}>
           <Card
-            title="新增工具趋势"
+            title={
+              <span style={{ fontFamily: "'Noto Serif SC', serif", fontWeight: 600, color: '#1a365d', fontSize: 14 }}>
+                新增工具趋势
+              </span>
+            }
             extra={
               <Segmented
                 options={[
@@ -71,6 +103,11 @@ const Trends: React.FC = () => {
                 onChange={(v) => setTimelineDays(v as number)}
               />
             }
+            style={{
+              borderRadius: 6,
+              border: '1px solid #e8e4df',
+              boxShadow: '0 1px 2px rgba(0,0,0,0.03)',
+            }}
           >
             {lineData.length > 0 ? (
               <TrendChart option={createLineOption(lineData, '')} height={400} />

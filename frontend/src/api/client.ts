@@ -20,7 +20,7 @@ client.interceptors.response.use(
     logger.apiResponse(
       response.config.url ?? '',
       response.status,
-      `duration=${Date.now() - (response.config as Record<string, never>)._start}ms`
+      `duration=${Date.now() - ((response.config as unknown) as Record<string, number>)._start || 0}ms`
     );
     return response;
   },

@@ -26,7 +26,7 @@ const FilterPanel: React.FC<Props> = ({
   onLanguageChange,
 }) => {
   return (
-    <Space wrap style={{ marginBottom: 16 }}>
+    <Space wrap>
       <Select
         allowClear
         placeholder="选择分类"

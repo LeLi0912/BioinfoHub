@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Input } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 
@@ -12,11 +12,12 @@ const SearchBar: React.FC<Props> = ({ value, onChange, placeholder = '搜索工�
   return (
     <Input
       allowClear
+      size="large"
       placeholder={placeholder}
-      prefix={<SearchOutlined />}
+      prefix={<SearchOutlined style={{ color: '#9a9a9a' }} />}
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      style={{ maxWidth: 500 }}
+      style={{ maxWidth: 520 }}
     />
   );
 };

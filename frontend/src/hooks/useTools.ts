@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { fetchTools, fetchToolDetail } from '../api/tools';
 import type { ToolDetail, ToolSummary } from '../types';
 import { logger } from '../api/logger';
